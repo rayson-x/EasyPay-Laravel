@@ -22,7 +22,6 @@ class EasyPayProvider extends ServiceProvider
     {
         $this->commands([
             // todo 生成测试例子
-            // SentryTestCommand::class,
         ]);
     }
 
