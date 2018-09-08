@@ -40,19 +40,7 @@ class WechatPayCommand extends BaseEasyPayCommand
 
         $service = app($this->modes[$mode]);
 
-        $reflection = new \ReflectionClass($service);
-
-        $params = call_user_func($reflection->getMethod('getRequireParams')->getClosure($service));
-
-        $this->comment("填写必填参数");
-
-        foreach ($params as $param) {
-            if (!is_null($service->$param)) {
-                continue;
-            }
-
-            $service->$param = $this->readline("请填写{$param}: ");
-        }
+        $this->setRequireParams($service);
 
         foreach ($this->getCustomParams() as $key => $value) {
             $service->$key = $value;

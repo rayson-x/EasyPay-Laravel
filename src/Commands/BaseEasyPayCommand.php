@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 
 abstract class BaseEasyPayCommand extends Command
 {
+    protected $getRequireFunc = 'getRequireParams';
+
     /**
      * Create a new command instance.
      *
@@ -24,6 +26,33 @@ abstract class BaseEasyPayCommand extends Command
         $this->info($prompt);
 
         return rtrim(fgets(STDIN, 1024));
+    }
+
+    /**
+     * @param object $service
+     */
+    protected function setRequireParams($service)
+    {
+        $this->comment("填写必填参数");
+
+        foreach ($this->getRequireParams($service) as $param) {
+            if (!is_null($service->$param)) {
+                continue;
+            }
+
+            $service->$param = $this->readline("请填写{$param}: ");
+        }
+    }
+
+    /**
+     * @param object $service
+     * @return array
+     */
+    protected function getRequireParams($service)
+    {
+        $reflection = new \ReflectionClass($service);
+
+        return call_user_func($reflection->getMethod($this->getRequireFunc)->getClosure($service));
     }
 
     /**
