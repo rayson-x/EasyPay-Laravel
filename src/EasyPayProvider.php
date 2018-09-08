@@ -6,11 +6,34 @@ use EasyPay\Config;
 use EasyPay\PayFactory;
 use Illuminate\Support\ServiceProvider;
 
-/**
- * 获取通知信息
- */
 class EasyPayProvider extends ServiceProvider
 {
+    protected $trades = [
+        // 支付宝可用操作
+        'ali.qr.pay',
+        'ali.wap.pay',
+        'ali.refund',
+        'ali.transfers',
+        'ali.query.order',
+        'ali.close.order',
+        'ali.refund.query',
+        // 微信可用操作
+        'wechat.qr.pay',
+        'wechat.pub.pay',
+        'wechat.app.pay',
+        'wechat.wap.pay',
+        'wechat.refund',
+        'wechat.transfers',
+        'wechat.order.query',
+        'wechat.order.close',
+        'wechat.refund.query',        
+    ];
+
+    protected $notify = [
+        'wechat.notify',
+        'ali.notify',
+    ];
+
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -21,7 +44,8 @@ class EasyPayProvider extends ServiceProvider
     protected function registerArtisanCommands()
     {
         $this->commands([
-            // todo 生成测试例子
+            Commands\AliPayCommand::class,
+            Commands\WechatPayCommand::class,
         ]);
     }
 
@@ -52,7 +76,7 @@ class EasyPayProvider extends ServiceProvider
      */
     public function register()
     {
-        foreach ($this->provides() as $service) {
+        foreach ($this->trades as $service) {
             $this->app->singleton($service, function ($app) use ($service) {
                 return PayFactory::create($service);
             });
@@ -66,25 +90,6 @@ class EasyPayProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [
-            // 支付宝可用操作
-            'ali.qr.pay',
-            'ali.wap.pay',
-            'ali.refund',
-            'ali.transfers',
-            'ali.query.order',
-            'ali.close.order',
-            'ali.refund.query',
-            // 微信可用操作
-            'wechat.qr.pay',
-            'wechat.pub.pay',
-            'wechat.app.pay',
-            'wechat.wap.pay',
-            'wechat.refund',
-            'wechat.transfers',
-            'wechat.order.query',
-            'wechat.order.close',
-            'wechat.refund.query',
-        ];
+        return array_merge($this->trades, $this->notify);
     }
 }
