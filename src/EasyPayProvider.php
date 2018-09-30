@@ -13,7 +13,7 @@ class EasyPayProvider extends ServiceProvider
         'ali.qr.pay',
         'ali.wap.pay',
         'ali.refund',
-        'ali.transfers',
+        'ali.transfer',
         'ali.query.order',
         'ali.close.order',
         'ali.refund.query',
@@ -23,7 +23,7 @@ class EasyPayProvider extends ServiceProvider
         'wechat.app.pay',
         'wechat.wap.pay',
         'wechat.refund',
-        'wechat.transfers',
+        'wechat.transfer',
         'wechat.order.query',
         'wechat.order.close',
         'wechat.refund.query',        
@@ -41,11 +41,22 @@ class EasyPayProvider extends ServiceProvider
      */
     protected $defer = false;
 
+    /**
+     * Bootstrap commands.
+     *
+     * @return void
+     */
     protected function registerArtisanCommands()
     {
         $this->commands([
             Commands\AliPayCommand::class,
             Commands\WechatPayCommand::class,
+            Commands\CloseOrderCommand::class,
+            Commands\OrderQueryCommand::class,
+            Commands\RefundCommand::class,
+            Commands\RefundQueryCommand::class,
+            Commands\TransferCommand::class,
+            Commands\TransferQueryCommand::class,
         ]);
     }
 
@@ -77,7 +88,7 @@ class EasyPayProvider extends ServiceProvider
     public function register()
     {
         foreach ($this->trades as $service) {
-            $this->app->singleton($service, function ($app) use ($service) {
+            $this->app->bind($service, function ($app) use ($service) {
                 return PayFactory::create($service);
             });
         }

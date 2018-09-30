@@ -6,6 +6,11 @@ use Illuminate\Console\Command;
 
 class RefundCommand extends BaseEasyPayCommand
 {
+    protected $modes = [
+        'ali'       => 'ali.refund',
+        'wechat'    => 'wechat.refund',
+    ];
+
     /**
      * The name and signature of the console command.
      *
@@ -37,6 +42,12 @@ class RefundCommand extends BaseEasyPayCommand
      */
     public function handle()
     {
-        // TODO
+        $mode = $this->readline('请输入支付方式 [' . join(',', array_keys($this->modes)) . '] :');
+
+        if (!array_key_exists($mode, $this->modes)) {
+            $this->error("错误的支付方式: {$mode}");
+        }
+
+        $this->handleResult($this->runService(app($this->modes[$mode])));
     }
 }

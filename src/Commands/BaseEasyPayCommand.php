@@ -8,14 +8,21 @@ abstract class BaseEasyPayCommand extends Command
 {
     protected $getRequireFunc = 'getRequireParams';
 
+    protected $tradeTypes = ['ali', 'wechat'];
+
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * @param $service
+     * @return mixed
      */
-    public function __construct()
+    public function runService($service)
     {
-        parent::__construct();
+        $this->setRequireParams($service);
+
+        foreach ($this->getCustomParams() as $key => $value) {
+            $service->$key = $value;
+        }
+
+        return $service->execute();
     }
 
     /**
@@ -52,7 +59,9 @@ abstract class BaseEasyPayCommand extends Command
     {
         $reflection = new \ReflectionClass($service);
 
-        return call_user_func($reflection->getMethod($this->getRequireFunc)->getClosure($service));
+        return call_user_func(
+            $reflection->getMethod($this->getRequireFunc)->getClosure($service)
+        );
     }
 
     /**

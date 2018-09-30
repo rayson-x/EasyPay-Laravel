@@ -38,14 +38,6 @@ class WechatPayCommand extends BaseEasyPayCommand
             $this->error("错误的支付方式: {$mode}");
         }
 
-        $service = app($this->modes[$mode]);
-
-        $this->setRequireParams($service);
-
-        foreach ($this->getCustomParams() as $key => $value) {
-            $service->$key = $value;
-        }
-
-        $this->handleResult($service->execute());
+        $this->handleResult($this->runService(app($this->modes[$mode])));
     }
 }
