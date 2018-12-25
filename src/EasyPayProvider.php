@@ -67,7 +67,7 @@ class EasyPayProvider extends ServiceProvider
         // Register services
         foreach ($this->services as $service) {
             $this->app->bind($service, function ($app) use ($service) {
-                $path    = Arr::first(explode('.', $service));
+                $path = Arr::first(explode('.', $service));
                 $options = config("easyPay.{$path}");
 
                 return PayFactory::create($service, $options);
@@ -75,9 +75,9 @@ class EasyPayProvider extends ServiceProvider
         }
 
         foreach ($this->notifies as $notify) {
-            $this->app->bind($service, function ($app) use ($service) {
-                $path    = Arr::first(explode('.', $service));
-                $options = config("easyPay.{$path}");
+            $this->app->bind($notify, function ($app) use ($notify) {
+                $service = Arr::first(explode('.', $notify));
+                $options = config("easyPay.{$service}");
                 $request = $app->get('request');
 
                 return Notify::fromRequest($service, $request, $options);
