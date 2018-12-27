@@ -10,7 +10,9 @@ return [
         // 商户ID
         'mch_id'            =>  env('WEIXIN_MCH_ID'),
         // 回调地址
-        'notify_url'        =>  'http://example.com',
+        'notify_url'        =>  env('WEIXIN_NOTIFY_URL'),
+        // 小程序id
+        'program_appid'     =>  env('WEIXIN_PROGRAM_APPID'),
         // ssl证书路径
         'ssl_cert_path'     =>  env('WEIXIN_CERT_FILE'),
         // ssl密钥路径

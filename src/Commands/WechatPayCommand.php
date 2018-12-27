@@ -5,10 +5,11 @@ namespace EasyPay\Laravel\Commands;
 class WechatPayCommand extends BaseEasyPayCommand
 {
     protected $modes = [
-        'qr'    => 'wechat.qr.pay',
-        'wap'   => 'wechat.wap.pay',
-        'pub'   => 'wechat.pub.pay',
-        'app'   => 'wechat.app.pay',
+        'qr'      => 'wechat.qr.pay',
+        'wap'     => 'wechat.wap.pay',
+        'pub'     => 'wechat.pub.pay',
+        'app'     => 'wechat.app.pay',
+        'program' => 'wechat.program.pay',
     ];
 
     /**

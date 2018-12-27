@@ -22,6 +22,7 @@ class EasyPayProvider extends ServiceProvider
         // wechat
         'wechat.qr.pay',
         'wechat.pub.pay',
+        'wechat.program.pay',
         'wechat.app.pay',
         'wechat.wap.pay',
         'wechat.refund',
